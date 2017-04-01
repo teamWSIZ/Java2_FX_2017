@@ -1,4 +1,4 @@
-
+Do wykonania na zajęciach 1 Kwietnia 2017:
 
 _) GridPane:
     - widok fxml-a; row, column; dodawanie kolumn
