@@ -26,6 +26,23 @@ public class Controller {
         System.out.println("hi!");
     }
 
+    public void powiejszKoloAnimujac() {
+        double radius = kolo1.getRadius();
+        for (int i = 0; i < 20; i++) {
+            radius *= 1.02;
+            kolo1.setRadius(radius);
+            wait(100);
+        }
+    }
+
+    void wait(int milisekund) {
+        try {
+            Thread.sleep(milisekund);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void pomniejszKolo() {
         kolo1.setRadius(0.9 * kolo1.getRadius());
     }
