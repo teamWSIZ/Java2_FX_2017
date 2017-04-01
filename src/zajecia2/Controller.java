@@ -22,6 +22,10 @@ public class Controller {
         kolo1.setRadius(prom * 1.1);
     }
 
+    public void foo() {
+        System.out.println("hi!");
+    }
+
     public void pomniejszKolo() {
         kolo1.setRadius(0.9 * kolo1.getRadius());
     }

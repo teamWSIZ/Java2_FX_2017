@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -21,10 +22,11 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <Circle fx:id="kolo1" fill="#4b6b8a" radius="30.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-      <Button mnemonicParsing="false" onAction="#powiekszKolo" text="Powiększ">
+      <Button mnemonicParsing="false" onAction="#foo" text="Powiększ">
          <GridPane.margin>
             <Insets left="50.0" />
          </GridPane.margin></Button>
@@ -55,11 +57,13 @@
             </MenuBar>
          </top>
          <left>
-            <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER"  onAction="#buttonInMenuClicked"/>
+            <Button mnemonicParsing="false" onAction="#buttonInMenuClicked" text="Button" BorderPane.alignment="CENTER" />
          </left>
          <bottom>
-            <Label text="(to be filled)" fx:id="labelka" BorderPane.alignment="CENTER" />
+            <Label fx:id="labelka" text="(to be filled)" BorderPane.alignment="CENTER" />
          </bottom>
       </BorderPane>
+      <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
    </children>
 </GridPane>

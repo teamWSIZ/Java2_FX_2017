@@ -2,6 +2,8 @@ package zajecia2.podstawy_petle;
 
 /**
  * Created by pm on 2017-04-01.
+ *
+ * https://github.com/teamWSIZ/Java2_FX_2017
  */
 public class A {
     public static void main(String[] args) {
