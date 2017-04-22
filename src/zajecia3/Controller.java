@@ -43,10 +43,11 @@ public class Controller {
         int roboczych = 0;
         while (to.isAfter(from)) {
             x++;
-            DayOfWeek dzien = from.getDayOfWeek();
             roboczych++;
-            if (dzien.equals(DayOfWeek.SUNDAY) || dzien.equals(DayOfWeek.SATURDAY))
+            if (Holidays.isHoliday(from)) {
                 roboczych--;
+            }
+
             from = from.plusDays(1);
         }
         poleWyniku.setText("" + x);
