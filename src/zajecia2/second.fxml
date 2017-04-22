@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -26,7 +27,7 @@
   </rowConstraints>
    <children>
       <Circle fx:id="kolo1" fill="#4b6b8a" radius="30.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-      <Button mnemonicParsing="false" onAction="#foo" text="Powiększ">
+      <Button mnemonicParsing="false" onAction="#powiekszKolo" text="Powiększ">
          <GridPane.margin>
             <Insets left="50.0" />
          </GridPane.margin></Button>
@@ -68,5 +69,6 @@
          <center>
             <Button mnemonicParsing="false" onAction="#powiejszKoloAnimujac" text="Animuj" BorderPane.alignment="CENTER" />
          </center></BorderPane>
+      <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="3" />
    </children>
 </GridPane>
