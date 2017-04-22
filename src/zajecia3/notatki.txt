@@ -1,15 +1,6 @@
-Do wykonania na zajęciach 1 Kwietnia 2017:
+Kalendarz polskich świąt:
 
-_) GridPane:
-    - widok fxml-a; row, column; dodawanie kolumn
-    - pozycjonowanie obiektów w gridpane (row, col; w menu)
-    - podłączenie kontrolera (fx:controller="zajecia2.Controller" w fxml-u)
-_) Circle:
-    - "properties" (kolory, pędzel)
-    - niewidoczne "properties": radius
-    - get i set dla "radius" w kodzie
+https://4programmers.net/Forum/C_i_.NET/120107-Kalendarz_polski
 
-_) Wykorzystanie jednego z pól GridPane jako nowego obszaru dla BorderPane
-    - dodanie MenuBar
-    - dodawanie labeli i buttonów w kodzie (jak w html-u)
+
 
