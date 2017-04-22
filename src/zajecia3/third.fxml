@@ -10,7 +10,8 @@
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
           minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
           xmlns="http://javafx.com/javafx/8.0.112"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="zajecia3.Controller">
+          xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="zajecia3.Controller">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -25,8 +26,10 @@
       
       <DatePicker fx:id="dateFrom" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <DatePicker fx:id="dateTo" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <Button fx:id="buton1" mnemonicParsing="false" onAction="#dniMiedzyDatami" text="Button" />
+      <Button fx:id="buton1" mnemonicParsing="false"
+              onAction="#dniMiedzyDatami" text="Button" />
       <TextField fx:id="poleWyniku" GridPane.rowIndex="1" />
+      <TextField fx:id="dniRoboczych" GridPane.rowIndex="2" />
 
    </children>
 </GridPane>

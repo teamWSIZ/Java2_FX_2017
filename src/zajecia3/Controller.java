@@ -4,6 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+
 public class Controller {
     @FXML
     DatePicker dateFrom;
@@ -11,6 +14,8 @@ public class Controller {
     DatePicker dateTo;
     @FXML
     TextField poleWyniku;
+    @FXML
+    TextField dniRoboczych;
 
     public void foo() {
         System.out.println("hi!");
@@ -29,7 +34,24 @@ public class Controller {
         System.out.println(dateFrom.getValue());
 
         String dataJakoTekst = dateFrom.getValue().toString();
-        poleWyniku.setText(dataJakoTekst);
+
+
+        LocalDate from = dateFrom.getValue();
+        LocalDate to = dateTo.getValue();
+
+        int x = 0;
+        int roboczych = 0;
+        while (to.isAfter(from)) {
+            x++;
+            DayOfWeek dzien = from.getDayOfWeek();
+            roboczych++;
+            if (dzien.equals(DayOfWeek.SUNDAY) || dzien.equals(DayOfWeek.SATURDAY))
+                roboczych--;
+            from = from.plusDays(1);
+        }
+        poleWyniku.setText("" + x);
+        dniRoboczych.setText("" + roboczych);
+
     }
 
     public void pomniejszKolo() {
