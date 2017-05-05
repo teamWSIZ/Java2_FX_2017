@@ -1,0 +1,6 @@
+Do wykonania na zajęciach 1 Kwietnia 2017:
+
+
+- File syli css; ustawienie stylu okna (background) i buttonów
+- wersja bootstrapa dla fx ~~ https://github.com/aalmiray/bootstrapfx   (załączona wersja uproszczona)
+-
