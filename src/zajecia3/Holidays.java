@@ -4,7 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 /**
- * Created by pm on 2017-04-22.
+ * Próby wyliczenia polskich świąt państwowych...
  */
 public class Holidays {
     public static boolean isHoliday(LocalDate day)
