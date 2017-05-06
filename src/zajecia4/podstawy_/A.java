@@ -1,29 +1,28 @@
 package zajecia4.podstawy_;
 
-/**
- * Created by pm on 2017-04-01.
- *
- * https://github.com/teamWSIZ/Java2_FX_2017
- */
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class A {
     public static void main(String[] args) {
-        String s = "abc";
-        System.out.println(s);
-        System.out.println(s + " -- " + s);
+        List<String> produkty = new ArrayList<>();
 
-        int x = 10;
-        int y = 12;
-        int z = x + y;
+        produkty.add("Woda");
+        produkty.add("Cukier");
+        produkty.add("Drożdże");
 
-        System.out.println(x);
-        System.out.println("x = " + x);
-        System.out.println("x*y jest rowne " + (x*y));
+        System.out.println(produkty);
+        System.out.println(produkty.get(2));
+        produkty.set(1, "Mleko");
+        System.out.println(produkty);
 
-        for(int i = 0; i<=10; i++) {
-
-            System.out.println("napis" + i);
+        for(String s : produkty) {
+            System.out.println("<<" + s + ">>");
         }
 
-
+        Collections.sort(produkty);
+        System.out.println(produkty);
     }
 }
