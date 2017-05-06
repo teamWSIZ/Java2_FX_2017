@@ -14,6 +14,7 @@
         <URL value="@style.css"/>
         <URL value="@fextile.css"/>
     </stylesheets>
+
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -23,7 +24,7 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <Button onAction="#foo" text="Powiększ" styleClass="button, btn-primary"></Button>
+        <Button onAction="#foo" text="Powiększ" styleClass="button, btn-success"></Button>
         <Button onAction="#foo" text="Pomniejsz" styleClass="button, btn-info" GridPane.rowIndex="1"></Button>
         <CheckBox text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <DatePicker GridPane.columnIndex="1" />
