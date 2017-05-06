@@ -8,12 +8,15 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.util.stream.IntStream;
+
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("fourth.fxml"));
 
+        //niepotrzebne -- wczytywanie przez fourth.xml
 //        root.setStyle("-fx-background-image: url('resources/background.jpg')");
 //        root.setStyle(this.getClass().getResource("style.css").toExternalForm());
 
