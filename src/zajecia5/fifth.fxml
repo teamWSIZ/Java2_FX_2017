@@ -62,6 +62,9 @@
         <center>
             <TextArea fx:id="oknoTekstowe" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
         </center>
+        <bottom>
+            <Button mnemonicParsing="false" onAction="#alertujUsera" text="alert!" BorderPane.alignment="CENTER" />
+        </bottom>
     </BorderPane>
 
 </VBox>
