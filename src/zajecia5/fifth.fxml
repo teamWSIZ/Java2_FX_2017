@@ -32,6 +32,12 @@
             <Menu text="Tools">
                 <items>
                     <MenuItem text="Calculator" />
+               <Menu mnemonicParsing="false" text="Unspecified Menu">
+                 <items>
+                   <MenuItem mnemonicParsing="false" text="Action 1" />
+                     <MenuItem mnemonicParsing="false" text="Action 2" />
+                 </items>
+               </Menu>
                     <MenuItem text="Cutter" />
                     <MenuItem text="Color designer" />
                 </items>
@@ -48,7 +54,7 @@
     </MenuBar>
     <BorderPane prefHeight="200.0" prefWidth="200.0">
         <right>
-            <Button mnemonicParsing="false" text="Zamień na duże litery" BorderPane.alignment="CENTER" onAction="#zmienNaDuze"/>
+            <Button mnemonicParsing="false" onAction="#zmienNaDuze" text="Zamień na duże litery" BorderPane.alignment="CENTER" />
         </right>
         <center>
             <TextArea fx:id="oknoTekstowe" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />

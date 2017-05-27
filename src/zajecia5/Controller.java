@@ -3,6 +3,7 @@ package zajecia5;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
+
 public class Controller {
     @FXML
     TextArea oknoTekstowe;
