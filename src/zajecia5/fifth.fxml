@@ -1,37 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<VBox id="vbox" prefHeight="400" prefWidth="800"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="zajecia5.Controller">
+
+<VBox id="vbox" prefHeight="400" prefWidth="800" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zajecia5.Controller">
     <MenuBar fx:id="menuBar" onKeyPressed="#sayIt">
         <menus>
             <Menu text="File">
                 <items>
-                    <MenuItem text="New"/>
-                    <MenuItem text="Open"/>
-                    <MenuItem text="Save"/>
-                    <MenuItem text="Save As"/>
-                    <SeparatorMenuItem  />
-                    <MenuItem text="Exit"/>
+                    <MenuItem text="New" />
+                    <MenuItem text="Open" />
+                    <MenuItem text="Save" />
+                    <MenuItem text="Save As" />
+                    <SeparatorMenuItem />
+                    <MenuItem text="Exit" />
                 </items>
             </Menu>
             <Menu text="Edit">
                 <items>
-                    <MenuItem text="Copy"/>
-                    <MenuItem text="Cut"/>
-                    <MenuItem text="Paste"/>
+                    <MenuItem text="Copy" />
+                    <MenuItem text="Cut" />
+                    <MenuItem text="Paste" />
+                </items>
+            </Menu>
+            <Menu text="Tools">
+                <items>
+                    <MenuItem text="Calculator" />
+                    <MenuItem text="Cutter" />
+                    <MenuItem text="Color designer" />
                 </items>
             </Menu>
             <Menu text="Help">
                 <items>
-                    <MenuItem text="Search" disable="true"/>
-                    <MenuItem text="Online Manual" visible="false"/>
+                    <MenuItem disable="true" text="Search" />
+                    <MenuItem text="Online Manual" visible="false" />
                     <SeparatorMenuItem />
-                    <MenuItem text="About" onAction="#sayIt"/>
+                    <MenuItem onAction="#sayIt" text="About" />
                 </items>
             </Menu>
         </menus>
     </MenuBar>
+    <BorderPane prefHeight="200.0" prefWidth="200.0">
+        <right>
+            <Button mnemonicParsing="false" text="Zamień na duże litery" BorderPane.alignment="CENTER" onAction="#zmienNaDuze"/>
+        </right>
+        <center>
+            <TextArea fx:id="oknoTekstowe" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+        </center>
+    </BorderPane>
+
 </VBox>
