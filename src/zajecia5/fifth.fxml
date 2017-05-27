@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.canvas.Canvas?>
 <VBox id="vbox" prefHeight="400" prefWidth="800" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zajecia5.Controller">
     <MenuBar fx:id="menuBar" onKeyPressed="#sayIt">
         <menus>
@@ -60,8 +61,11 @@
             <Button mnemonicParsing="false" onAction="#zmienNaDuze" text="Zamień na duże litery" BorderPane.alignment="CENTER" />
         </right>
         <center>
-            <TextArea fx:id="oknoTekstowe" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <Canvas fx:id="mycanvas" height="500" width="500"/>
         </center>
+        <left>
+            <TextArea fx:id="oknoTekstowe" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+        </left>
         <bottom>
             <Button mnemonicParsing="false" onAction="#alertujUsera" text="alert!" BorderPane.alignment="CENTER" />
         </bottom>

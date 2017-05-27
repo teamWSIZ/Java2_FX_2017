@@ -1,9 +1,12 @@
 package zajecia5;
 
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.control.TextArea;
+import javafx.scene.shape.Rectangle;
 
 
 public class Controller {
@@ -12,6 +15,9 @@ public class Controller {
 
     @FXML
     Menu toolsMenu;
+
+    @FXML
+    Canvas mycanvas;
 
     public void sayIt() {
         System.out.println("It");
@@ -28,6 +34,18 @@ public class Controller {
         } else {
             toolsMenu.setDisable(true);
         }
+
+        //Użycie canvasu: 
+        GraphicsContext gc = mycanvas.getGraphicsContext2D();
+        int size = 30;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                gc.fillRoundRect(5 + i * 50, 5 + j * 50, size, size, 10, 10);
+            }
+        }
+//        Rectangle rr = new Rectangle(10, 10, 200, 100);
+//        gc.
+
 
     }
 
