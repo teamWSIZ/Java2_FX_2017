@@ -12,11 +12,23 @@ public class B {
         int poz = 0;
         int leftBorder = -5, righBorder = 5;
         char c = '1';
+        String wszystkie = "l,r,x";
+        String wprawo = "r,x";
+        String wlewo = "l,x";
         while(c!='x') {
-            System.out.print("Twój ruch? (r,l,x):");
+            System.out.print("Twój ruch? (");
+            if (poz==5) {
+                System.out.print(wlewo);
+            } else if (poz==-5) {
+                System.out.print(wprawo);
+            } else {
+                System.out.print(wszystkie);
+            }
+            System.out.print(")");
+
             c = s.next().charAt(0);
-            if (c=='l') poz--;
-            if (c=='r') poz++;
+            if (c=='l' && poz>-5) poz--;
+            if (c=='r' && poz<5) poz++;
             System.out.println("Pozycja=" + poz);
         }
 
