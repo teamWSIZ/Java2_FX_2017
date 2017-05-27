@@ -35,7 +35,7 @@ public class Controller {
             toolsMenu.setDisable(true);
         }
 
-        //Użycie canvasu: 
+        //Użycie canvasu:
         GraphicsContext gc = mycanvas.getGraphicsContext2D();
         int size = 30;
         for (int i = 0; i < 5; i++) {

@@ -29,7 +29,13 @@ public class B {
             c = s.next().charAt(0);
             if (c=='l' && poz>-5) poz--;
             if (c=='r' && poz<5) poz++;
-            System.out.println("Pozycja=" + poz);
+//            System.out.println("Pozycja=" + poz);
+            String pole = "";
+            for (int i = -5; i <= 5; i++) {
+                if (i!=poz) pole += ".";
+                else pole += "@";
+            }
+            System.out.println(pole);
         }
 
     }
