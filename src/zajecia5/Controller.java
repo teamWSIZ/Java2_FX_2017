@@ -1,17 +1,24 @@
 package zajecia5;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Menu;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.File;
+import java.util.Optional;
 
 
 public class Controller {
@@ -55,6 +62,24 @@ public class Controller {
                 gc.fillRoundRect(5 + i * 50, 5 + j * 50, size, size, 10, 10);
             }
         }
+        //see eg. http://docs.oracle.com/javafx/2/canvas/jfxpub-canvas.htm
+        gc.setFill(Color.color(0.1,0.7,0.5,0.5));
+        gc.fillArc(10, 110, 300, 300, 45, 240, ArcType.OPEN);
+
+        //Przykład późniejszego wykonania; lepiej by było mieć ExecutorService
+        Task<Void> doItLater = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                Thread.sleep(1000);
+                return null;
+            }
+        };
+        doItLater.setOnSucceeded(event -> {
+            mycanvas.setTranslateX(100);
+        });
+        new Thread(doItLater).start();
+
+        //todo: rysowanie png
     }
 
     public void alertujUsera() {
@@ -63,7 +88,8 @@ public class Controller {
         alert.setTitle("Warning Dialog!");
         alert.setHeaderText("Some header");
         //todo: wyświetla narazie tylko jedną linijkę
-        alert.setContentText("Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula. Ut molestie a, ultricies porta urna. Vestibulum commodo volutpat a, convallis ac, laoreet enim. Phasellus fermentum in, dolor. Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec malesuada fames ac turpis velit, rhoncus eu, luctus et interdum adipiscing wisi. Aliquam erat ac ipsum. Integer aliquam purus. ");
+        alert.setContentText("Lorem ipsum dolor sit amet enim. Etiam ullamcorper. " +
+                "Suspendisse a pellentesque dui, non felis. ");
         alert.showAndWait();
         //more at: http://code.makery.ch/blog/javafx-dialogs-official/
     }
@@ -71,5 +97,72 @@ public class Controller {
     public void myOpenFile() {
         File f = new FileChooser().showOpenDialog(stage);
         System.out.println(f.getAbsolutePath());
+    }
+
+    public void loginDialog() {
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Login Dialog");
+        dialog.setHeaderText("Look, a Custom Login Dialog");
+
+        //Customizacja buttonów okna
+        ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.LEFT);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField userField = new TextField();
+        userField.setPromptText("Użytkownik");
+        PasswordField passField = new PasswordField();
+        passField.setPromptText("Hasło");
+
+        grid.add(new Label("Username:"), 0, 0);
+        grid.add(userField, 1, 0);
+        grid.add(new Label("Password:"), 0, 1);
+        grid.add(passField, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        /*
+         * Wykonanie operacji przez wątek UI (JavaFX application thread)
+         * lepsze niż samo userField.requestFocus();
+         *
+         * See also: https://stackoverflow.com/questions/13784333/platform-runlater-and-task-in-javafx
+         */
+        Platform.runLater(userField::requestFocus);
+
+        //Te pola mają wiele "properties", które są "ObservableValue"; można zaczepiać listenery
+        userField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals("Abra Kadabra")) {
+                System.out.println("Powitał Kadabra!");
+            }
+        });
+
+//        userField.borderProperty().addListener((observable, oldValue, newValue) -> {
+//            Border xxx = oldValue;
+//        });
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType) {
+                return new Pair<>(userField.getText(), passField.getText());
+            } else if (dialogButton==ButtonType.CANCEL) {
+                System.out.println("Cancel button clicked");
+            }
+            return null;
+        });
+
+        Optional<Pair<String, String>> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+            Pair<String, String> ppp = result.get();
+            System.out.println("Username:" + ppp.getKey());
+            System.out.println("Password:" + ppp.getValue());
+        }
+
+        //todo: "new game dialog" or "num keyboard dialog"
+        //todo: akcje pod klawiszami
+
     }
 }

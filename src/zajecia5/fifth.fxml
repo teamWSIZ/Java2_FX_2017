@@ -53,6 +53,7 @@
                     <MenuItem text="Online Manual" visible="false" />
                     <SeparatorMenuItem />
                     <MenuItem onAction="#sayIt" text="About" />
+                    <MenuItem onAction="#loginDialog" text="Sign in" />
                 </items>
             </Menu>
         </menus>
