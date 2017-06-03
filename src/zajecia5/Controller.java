@@ -63,6 +63,7 @@ public class Controller {
         //see eg. http://docs.oracle.com/javafx/2/canvas/jfxpub-canvas.htm
         gc.setFill(Color.color(0.1, 0.7, 0.5, 0.5));
         gc.fillArc(10, 110, 300, 300, 45, 240, ArcType.OPEN);
+        //todo: draw image
     }
 
     public void alertujUsera() {
