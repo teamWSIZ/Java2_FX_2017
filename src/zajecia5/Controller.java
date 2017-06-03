@@ -75,12 +75,29 @@ public class Controller {
         System.out.println(f.getAbsolutePath());
     }
 
+    public void dodajUsera() {
+        Dialog<String> dialog = new Dialog<>();
+        //title...
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        //GridPane   ma mieć (3, 2)
+        GridPane grid = new GridPane();
+        //Dostawić elementy
+
+        dialog.getDialogPane().setContent(grid);
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            System.out.println(result.get());
+        }
+    }
+
     public void loginDialog() {
-        //Tworzenie obiektu dialogowego
+        //Tworzenie obiektu dialogowego:
+        // parametrem jest wynik który dostaniemy z dialogu (tutaj parę dwóch napisów)
+        // (gdybyśmy chcieli pojedynczą np. liczbę, to byłoby Dialog<Integer>)
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Log in");
         dialog.setHeaderText("Logowanie do systemu");
-
         //Customizacja buttonów okna
         ButtonType naszeLogowanie = new ButtonType("Zaloguj", ButtonBar.ButtonData.APPLY);
 //        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.PREVIOUS, ButtonType.YES.NEXT, ButtonType.FINISH, ButtonType.CANCEL);
