@@ -1,17 +1,20 @@
 package zajecia5;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Menu;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.File;
+import java.util.Optional;
 
 
 public class Controller {
@@ -70,5 +73,75 @@ public class Controller {
     public void myOpenFile() {
         File f = new FileChooser().showOpenDialog(stage);
         System.out.println(f.getAbsolutePath());
+    }
+
+    public void loginDialog() {
+        //Tworzenie obiektu dialogowego
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Log in");
+        dialog.setHeaderText("Logowanie do systemu");
+
+        //Customizacja buttonów okna
+        ButtonType naszeLogowanie = new ButtonType("Zaloguj", ButtonBar.ButtonData.APPLY);
+//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.PREVIOUS, ButtonType.YES.NEXT, ButtonType.FINISH, ButtonType.CANCEL);
+        dialog.getDialogPane().getButtonTypes().addAll(naszeLogowanie, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField userField = new TextField();
+        userField.setPromptText("User");
+        PasswordField passField = new PasswordField();
+        passField.setPromptText("Hasło");
+
+        grid.add(new Label("Username:"), 0, 0);
+        grid.add(userField, 1, 0);
+        grid.add(new Label("Password:"), 0, 1);
+        grid.add(passField, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        /*
+         * Wykonanie operacji przez wątek UI (JavaFX application thread)
+         * lepsze niż samo userField.requestFocus();
+         *
+         * See also: https://stackoverflow.com/questions/13784333/platform-runlater-and-task-in-javafx
+         */
+        Platform.runLater(userField::requestFocus);
+
+        //Te pola mają wiele "properties", które są "ObservableValue"; można zaczepiać listenery
+//        userField.textProperty().addListener((observable, oldValue, newValue) -> {
+//            if (newValue.equals("Abra Kadabra")) {
+//                System.out.println("Powitał Kadabra!");
+//            }
+//        });
+
+//        userField.borderProperty().addListener((observable, oldValue, newValue) -> {
+//            Border xxx = oldValue;
+//        });
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == naszeLogowanie) {
+                return new Pair<>(userField.getText(), passField.getText());
+            } else if (dialogButton==ButtonType.CANCEL) {
+                System.out.println("Cancel button clicked");
+            }
+            return null;
+        });
+
+        //Ten kod pokazuje dialog na ekranie, i zmusza usera do reakcji
+        Optional<Pair<String, String>> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+            Pair<String, String> ppp = result.get();
+            System.out.println("Username:" + ppp.getKey());
+            System.out.println("Password:" + ppp.getValue());
+        }
+
+        //todo: "new game dialog" or "num keyboard dialog"
+        //todo: akcje pod klawiszami
+
     }
 }
