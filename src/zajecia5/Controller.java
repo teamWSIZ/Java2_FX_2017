@@ -8,6 +8,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -58,6 +60,9 @@ public class Controller {
                 gc.fillRoundRect(5 + i * 50, 5 + j * 50, size, size, 10, 10);
             }
         }
+        //see eg. http://docs.oracle.com/javafx/2/canvas/jfxpub-canvas.htm
+        gc.setFill(Color.color(0.1, 0.7, 0.5, 0.5));
+        gc.fillArc(10, 110, 300, 300, 45, 240, ArcType.OPEN);
     }
 
     public void alertujUsera() {
