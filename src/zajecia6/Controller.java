@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
@@ -62,6 +63,8 @@ public class Controller {
         gc.setFill(Color.color(0.1, 0.7, 0.5, 0.5));
         gc.fillArc(10, 110, 300, 300, 45, 240, ArcType.OPEN);
         //todo: draw image
+        Image lulu = loadImage("Lulu-Dragon-Trainer-icon.png");
+        gc.drawImage(lulu, 30, 100, 256, 256);
     }
 
     public void alertujUsera() {
@@ -164,5 +167,10 @@ public class Controller {
         //todo: "new game dialog" or "num keyboard dialog"
         //todo: akcje pod klawiszami
 
+    }
+
+    //private
+    Image loadImage(String name) {
+        return new Image(getClass().getResourceAsStream("res/" + name));
     }
 }
