@@ -14,7 +14,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import javax.swing.*;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -30,6 +34,22 @@ public class Controller {
 
     @FXML
     Stage stage;
+
+    List<Image> ikony;
+
+
+    public Controller() {
+        List<String> iconFiles = new ArrayList<>();
+        iconFiles.add("Lulu-Dragon-Trainer-icon.png");
+        iconFiles.add("Quinn-Valor-icon.png");
+        iconFiles.add("Yasuo-icon.png");
+        iconFiles.add("Veigar-icon.png");
+
+        ikony = new ArrayList<>();
+        for(String name : iconFiles) {
+            ikony.add(loadImage(name));
+        }
+    }
 
     public void sayIt() {
         System.out.println("It");
@@ -63,8 +83,13 @@ public class Controller {
         gc.setFill(Color.color(0.1, 0.7, 0.5, 0.5));
         gc.fillArc(10, 110, 300, 300, 45, 240, ArcType.OPEN);
         //todo: draw image
-        Image lulu = loadImage("Lulu-Dragon-Trainer-icon.png");
-        gc.drawImage(lulu, 30, 100, 256, 256);
+//        Image lulu = loadImage("Lulu-Dragon-Trainer-icon.png");
+//        gc.drawImage(lulu, 30, 100, 256, 256);
+
+        for (int i = 0; i < ikony.size(); i++) {
+            gc.drawImage(ikony.get(i), 50 + i * 135, 50, 128, 128);
+        }
+
     }
 
     public void alertujUsera() {

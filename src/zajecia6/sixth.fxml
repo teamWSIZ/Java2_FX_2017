@@ -61,7 +61,7 @@
             </VBox>
         </right>
         <center>
-            <Canvas fx:id="mycanvas" height="400" width="400" />
+            <Canvas fx:id="mycanvas" height="400" width="800" />
         </center>
         <left>
             <TextArea fx:id="oknoTekstowe" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
