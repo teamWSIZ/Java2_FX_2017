@@ -64,16 +64,27 @@ public class Controller {
 
         //sprawdza, czy sprite pokrywa punkt (xx,yy)
         boolean isHitAt(int xx, int yy) {
-           ////  
+           ////
+            return true;
         }
 
         //sprawdza czy obecny sprite koliduje z innym spritem `s`
         // (czyli czy prostokąty mają punkt wspólny)
         boolean collidesWith(Sprite s) {
             //
+            return true;
         }
 
     }
+
+    /**
+     * Do zrobienia:
+     * - wybór postaci (kliknięciem)
+     * - przesuwanie wybranej postaci
+     * - detekcja kolizi postaci -- np. zmiana tła obu na czerowne
+     * (todo: animacja gry: z prędkościami)
+     * 
+     */
 
 
 
