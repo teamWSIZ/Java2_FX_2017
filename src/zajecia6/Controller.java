@@ -7,6 +7,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.SnapshotParameters;
@@ -15,6 +16,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -93,13 +95,30 @@ public class Controller {
             gc.strokeRoundRect(50 + i * 135, 50, size, size, 10, 10);
         }
 
+        // Clear away portions as the user drags the mouse
+        mycanvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        gc.clearRect(e.getX() - 2, e.getY() - 2, 5, 5);
+                    }
+                });
+
+        // Fill the Canvas with a Blue rectnagle when the user double-clicks
+        mycanvas.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent t) {
+                        System.out.println("Kliknięto w miejscu x=" + t.getX());
+                        if (t.getClickCount() >1) {
+//                            reset(canvas, Color.BLUE);
+                        }
+                    }
+                });
+
         //todo: załadować część obrazka
         //todo: ustawić rodzaj pędzla
         //todo: obsługa myszy i "draggable"
-
-
-
-
     }
 
     public void animateLulu() {
@@ -128,16 +147,9 @@ public class Controller {
             @Override
             public void handle(long now) {
                 Image i = ikony.get(0);
-
-                ImageView iv = new ImageView(i);
-                iv.setRotate(phi.getValue());
-                SnapshotParameters params = new SnapshotParameters();
-                params.setFill(Color.TRANSPARENT);
-                Image rotatedImage = iv.snapshot(params, null);
-
                 gc.clearRect(0, 0, 500, 500);
                 //show icon on canvas
-                gc.drawImage(rotatedImage, x.doubleValue(), y.doubleValue(), 300, 300);
+                gc.drawImage(i, x.doubleValue(), y.doubleValue(), 300, 300);
 
             }
         };
@@ -250,5 +262,14 @@ public class Controller {
     //private
     Image loadImage(String name) {
         return new Image(getClass().getResourceAsStream("res/" + name));
+    }
+
+    private Image rotateImage(Image i, DoubleProperty phi) {
+        ImageView iv = new ImageView(i);
+        iv.setRotate(phi.getValue());
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
+        Image rotatedImage = iv.snapshot(params, null);
+        return rotatedImage;
     }
 }
