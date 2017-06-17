@@ -57,9 +57,22 @@ public class Controller {
         int y;
         int iconNumber;
 
+        //drukuje sprite'a na `gc` z lewym górnym rogiem w (x,y)
         void printSprite(GraphicsContext gc) {
             printIconWithRectangle(gc, ikony.get(iconNumber), x, y);
         }
+
+        //sprawdza, czy sprite pokrywa punkt (xx,yy)
+        boolean isHitAt(int xx, int yy) {
+           ////  
+        }
+
+        //sprawdza czy obecny sprite koliduje z innym spritem `s`
+        // (czyli czy prostokąty mają punkt wspólny)
+        boolean collidesWith(Sprite s) {
+            //
+        }
+
     }
 
 
@@ -131,8 +144,12 @@ public class Controller {
         mycanvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
                 new EventHandler<MouseEvent>() {
                     @Override
-                    public void handle(MouseEvent e) {
-                        gc.clearRect(e.getX() - 2, e.getY() - 2, 5, 5);
+                    public void handle(MouseEvent t) {
+                        Sprite lulu = sprites.get(0);
+                        lulu.x = (int) (t.getX() - ICON_SIZE/2);
+                        lulu.y = (int) (t.getY() - ICON_SIZE/2);
+                        repaintScene(gc);
+
                     }
                 });
 
@@ -143,10 +160,7 @@ public class Controller {
                     public void handle(MouseEvent t) {
                         System.out.println("Kliknięto w miejscu x=" + t.getX());
                         System.out.println("Pełna informacja:" + t);
-                        Sprite lulu = sprites.get(0);
-                        lulu.x = (int) t.getX();
-                        lulu.y = (int) t.getY();
-                        repaintScene(gc);
+
 
                         if (t.getClickCount() >1) {
 //                            reset(canvas, Color.BLUE);
