@@ -48,6 +48,20 @@ public class Controller {
     Stage stage;
 
     List<Image> ikony;
+    List<Sprite> sprites;
+
+    int ICON_SIZE = 120;
+
+    class Sprite {
+        int x;
+        int y;
+        int iconNumber;
+
+        void printSprite(GraphicsContext gc) {
+            printIconWithRectangle(gc, ikony.get(iconNumber), x, y);
+        }
+    }
+
 
 
     public Controller() {
@@ -82,18 +96,36 @@ public class Controller {
         }
     }
 
+    private void printIconWithRectangle(GraphicsContext gc, Image i, int x, int y) {
+        gc.drawImage(i, x+5, y+5, ICON_SIZE-5, ICON_SIZE-5);
+        gc.strokeRoundRect(x, y, ICON_SIZE, ICON_SIZE, 10, 10);
+    }
+
+    private void repaintScene(GraphicsContext gc) {
+        gc.clearRect(0, 0, 800, 800);
+        gc.setFill(Color.color(0.1, 0.7, 0.5, 0.5));
+        gc.fillArc(10, 110, 300, 300, 45, 240, ArcType.OPEN);
+        for(Sprite s : sprites) {
+            s.printSprite(gc);
+        }
+    }
+
+
     public void drawOnCanvas() {
         //Użycie canvasu:
         GraphicsContext gc = mycanvas.getGraphicsContext2D();
 
-        //see eg. http://docs.oracle.com/javafx/2/canvas/jfxpub-canvas.htm
-        gc.setFill(Color.color(0.1, 0.7, 0.5, 0.5));
-        gc.fillArc(10, 110, 300, 300, 45, 240, ArcType.OPEN);
-        int size = 128;
-        for (int i = 0; i < ikony.size(); i++) {
-            gc.drawImage(ikony.get(i), 50 + i * 135, 55, size, size);
-            gc.strokeRoundRect(50 + i * 135, 50, size, size, 10, 10);
+        //tworzenie postaci gry (sprite'ów)
+        sprites = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            Sprite s = new Sprite();
+            s.x = 135 * i;
+            s.y = 55;
+            s.iconNumber = i;
+            sprites.add(s);
         }
+
+        repaintScene(gc);
 
         // Clear away portions as the user drags the mouse
         mycanvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
@@ -110,6 +142,12 @@ public class Controller {
                     @Override
                     public void handle(MouseEvent t) {
                         System.out.println("Kliknięto w miejscu x=" + t.getX());
+                        System.out.println("Pełna informacja:" + t);
+                        Sprite lulu = sprites.get(0);
+                        lulu.x = (int) t.getX();
+                        lulu.y = (int) t.getY();
+                        repaintScene(gc);
+
                         if (t.getClickCount() >1) {
 //                            reset(canvas, Color.BLUE);
                         }
