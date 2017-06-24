@@ -65,10 +65,11 @@ public class Controller {
     class Sprite {
         int x, y;  //współrzędne lewego górnego rogu ikony
         int iconNumber;
+        boolean isSelected;
 
         //drukuje sprite'a na `gc` z lewym górnym rogiem w (x,y)
         void printSprite(GraphicsContext gc) {
-            printIconWithRectangle(gc, ikony.get(iconNumber), x, y);
+            printIconWithRectangle(gc, ikony.get(iconNumber), x, y, isSelected);
         }
 
         //sprawdza, czy sprite pokrywa punkt (xx,yy)
@@ -132,7 +133,7 @@ public class Controller {
         }
     }
 
-    private void printIconWithRectangle(GraphicsContext gc, Image i, int x, int y) {
+    private void printIconWithRectangle(GraphicsContext gc, Image i, int x, int y, boolean isSelected) {
         gc.drawImage(i, x+5, y+5, ICON_SIZE-5, ICON_SIZE-5);
         gc.strokeRoundRect(x, y, ICON_SIZE, ICON_SIZE, 10, 10);
     }
@@ -221,6 +222,10 @@ public class Controller {
         selectedSprite = spriteId;
         offsetX = sprites.get(spriteId).x - xx;
         offsetY = sprites.get(spriteId).y - yy;
+        for(Sprite s : sprites) {
+            s.isSelected = false;
+        }
+        sprites.get(selectedSprite).isSelected = true;
     }
 
     public void animateLulu() {
