@@ -135,7 +135,16 @@ public class Controller {
 
     private void printIconWithRectangle(GraphicsContext gc, Image i, int x, int y, boolean isSelected) {
         gc.drawImage(i, x+5, y+5, ICON_SIZE-5, ICON_SIZE-5);
+        if (isSelected) {
+            gc.setLineWidth(3);
+            gc.setStroke(Color.YELLOWGREEN);
+        } else {
+            gc.setLineWidth(1);
+            gc.setStroke(Color.GRAY);
+        }
         gc.strokeRoundRect(x, y, ICON_SIZE, ICON_SIZE, 10, 10);
+        gc.setStroke(Color.BLACK);
+
     }
 
     private void repaintScene(GraphicsContext gc) {
