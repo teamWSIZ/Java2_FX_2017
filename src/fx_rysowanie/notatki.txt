@@ -1,0 +1,7 @@
+
+
+todo:
+- czy sprite trafiony kliknięciem
+- które sprite'y wybrane
+- przeciąganie "nie centrum tylko tam gdzie kliknięto"
+- 'game time'
