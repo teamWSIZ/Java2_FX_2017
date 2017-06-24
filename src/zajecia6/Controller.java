@@ -16,6 +16,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -53,8 +54,7 @@ public class Controller {
     int ICON_SIZE = 120;
 
     class Sprite {
-        int x;
-        int y;
+        int x, y;  //współrzędne lewego górnego rogu ikony
         int iconNumber;
 
         //drukuje sprite'a na `gc` z lewym górnym rogiem w (x,y)
@@ -64,7 +64,10 @@ public class Controller {
 
         //sprawdza, czy sprite pokrywa punkt (xx,yy)
         boolean isHitAt(int xx, int yy) {
-           ////
+            if (xx<x) return false;
+            if (xx>x+ICON_SIZE) return false;
+            if (yy<y) return false;
+            if (yy>y+ICON_SIZE) return false;
             return true;
         }
 
@@ -83,7 +86,7 @@ public class Controller {
      * - przesuwanie wybranej postaci
      * - detekcja kolizi postaci -- np. zmiana tła obu na czerowne
      * (todo: animacja gry: z prędkościami)
-     * 
+     *
      */
 
 
@@ -169,8 +172,18 @@ public class Controller {
                 new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent t) {
-                        System.out.println("Kliknięto w miejscu x=" + t.getX());
-                        System.out.println("Pełna informacja:" + t);
+//                        System.out.println("Kliknięto w miejscu x=" + t.getX());
+//                        System.out.println("Pełna informacja:" + t);
+
+                        //współrzędne kliknięcia
+                        int xx = (int)t.getX();
+                        int yy = (int)t.getY();
+
+                        for(Sprite s : sprites) {
+                            if (s.isHitAt(xx,yy)) {
+                                System.out.println("Sprite trafiony: " + s.iconNumber);
+                            }
+                        }
 
 
                         if (t.getClickCount() >1) {
@@ -178,6 +191,14 @@ public class Controller {
                         }
                     }
                 });
+
+        mycanvas.getScene().setOnKeyPressed(event -> {
+            String code = event.getCode().toString();
+            System.out.println(code);
+            if (event.getCode()== (KeyCode.DOWN)) {
+                System.out.println("Hit arrow down");
+            }
+        });
 
         //todo: załadować część obrazka
         //todo: ustawić rodzaj pędzla
