@@ -48,10 +48,19 @@ public class Controller {
     @FXML
     Stage stage;
 
-    List<Image> ikony;
-    List<Sprite> sprites;
 
+    List<Image> ikony;  //kolekcja obrazków
+    List<Sprite> sprites;   //kolekcja obiektów odpowiadających postaciom gry
+
+    //selekcja postaci
+    int selectedSprite = 0;    //-1: żaden nie jest wybrany
+    int offsetX = 0;
+    int offsetY = 0;
+
+
+    //stałe w programie
     int ICON_SIZE = 120;
+
 
     class Sprite {
         int x, y;  //współrzędne lewego górnego rogu ikony
@@ -159,9 +168,9 @@ public class Controller {
                 new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent t) {
-                        Sprite lulu = sprites.get(0);
-                        lulu.x = (int) (t.getX() - ICON_SIZE/2);
-                        lulu.y = (int) (t.getY() - ICON_SIZE/2);
+                        Sprite lulu = sprites.get(selectedSprite);
+                        lulu.x = (int) (t.getX() + offsetX);
+                        lulu.y = (int) (t.getY() + offsetY);
                         repaintScene(gc);
 
                     }
@@ -179,11 +188,13 @@ public class Controller {
                         int xx = (int)t.getX();
                         int yy = (int)t.getY();
 
-                        for(Sprite s : sprites) {
-                            if (s.isHitAt(xx,yy)) {
-                                System.out.println("Sprite trafiony: " + s.iconNumber);
+                        for (int spriteId = 0; spriteId < sprites.size(); spriteId++) {
+                            if (sprites.get(spriteId).isHitAt(xx,yy)) {
+                                System.out.println("Sprite trafiony: " + spriteId);
+                                selectSpriteHitAt(spriteId, xx, yy);
                             }
                         }
+
 
 
                         if (t.getClickCount() >1) {
@@ -203,6 +214,13 @@ public class Controller {
         //todo: załadować część obrazka
         //todo: ustawić rodzaj pędzla
         //todo: obsługa myszy i "draggable"
+    }
+
+    //będzie wykonywana przy selekcji sprite'a; xx,yy pozwolą ustawić za który punkt sprite ma być ciągnięty
+    private void selectSpriteHitAt(int spriteId, int xx, int yy) {
+        selectedSprite = spriteId;
+        offsetX = sprites.get(spriteId).x - xx;
+        offsetY = sprites.get(spriteId).y - yy;
     }
 
     public void animateLulu() {
