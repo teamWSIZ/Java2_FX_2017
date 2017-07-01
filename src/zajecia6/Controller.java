@@ -61,22 +61,29 @@ public class Controller {
     //stałe w programie
     int ICON_SIZE = 120;
     int FRAMES_PER_SECOND = 30;
+    double COLLISION_DISTANCE = 50;
 
 
+    /**
+     *  Główna klasa zbierająca informacje o pojedynczej postaci gry.
+     *  Zawiera również informacje o pozycji postaci i prędkości jej ruchu, oraz metody
+     *  do wykrywania kolizji, rysowania postaci, i ustalania nowego celu ruchu.
+     */
     class Sprite {
         int iconNumber;
-        boolean isSelected;
+        boolean isSelected; //true jeśli tą postacią chcemy poruszać
 
         //Położenia
         double x, y;  //współrzędne centrum spritea
         double goalX, goalY; //współrzędne punktu do którego zmierzamy
 
         //Prędkości
-        double v = 5;
-        double vx = 0;
+        double v = 5;   //maksymalna prędkość
+        double vx = 0;  //składowe aktualnej prędkości
         double vy = 0;
 
 
+        //tzw. Konstruktor, czyli tworzenie konkretnej instancji tej klasy
         public Sprite(int iconNumber, double x, double y) {
             this.iconNumber = iconNumber;
             this.x = x;
@@ -85,20 +92,18 @@ public class Controller {
             this.goalY = y;
         }
 
-        //drukuje sprite'a na `gc` z lewym górnym rogiem w (x,y)
+        //drukuje sprite'a na `gc` centrum w (x,y)
         void printSprite(GraphicsContext gc) {
             printIconWithRectangle(gc, ikony.get(iconNumber),
                     (int)x - ICON_SIZE/2, (int)y - ICON_SIZE/2, isSelected);
         }
 
-        //sprawdza czy obecny sprite koliduje z innym spritem `s`
-        // (czyli czy prostokąty mają punkt wspólny)
-        boolean collidesWith(Sprite s) {
-            //
-            return true;
+        //sprawdza czy obecny sprite koliduje z punktem (px, py)
+        boolean collidesWith(double px, double py) {
+            return distance(x, y, px, px) < COLLISION_DISTANCE;
         }
 
-
+        //Wykonywana jeśli chcemy by sprite od teraz poruszał się w kierunku punktu (newGoalX, newGoalY)
         public void setNewGoalPosition(double newGoalX, double newGoalY){
             goalX = newGoalX;
             goalY = newGoalY;
@@ -119,6 +124,7 @@ public class Controller {
             vx = A * vy;
         };
 
+        //Wykonywana w każdej klatce animacji: wyliczenie nowego położenia sprite'a
         public void updatePosition() {
             //warunek dla osiągnięcia celu
             if (distance(x+vx, y+vy, goalX,goalY) > distance(x,y,goalX,goalY)) {
@@ -133,7 +139,6 @@ public class Controller {
         private double distance(double x, double y, double x1, double y1) {
             return Math.sqrt((x - x1) * (x - x1) + (y - y1) * (y - y1));
         }
-
 
     }
 
@@ -177,7 +182,7 @@ public class Controller {
 
         sprites = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            Sprite s = new Sprite(i, 50 + 135 * i, 100);
+            Sprite s = new Sprite(i, 150 + 135 * i, 100);  //ustawienie początkowych pozycji sprite'ów
             sprites.add(s);
         }
         sprites.get(0).isSelected = true;
@@ -190,10 +195,14 @@ public class Controller {
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-//                System.out.println("called: " + new Date());
+                        //Wykonywana w każdej klatce animacji gry:
+
+                        //Przesuń sprite'y na nowe pozycje
                         for(Sprite s : sprites) {
                             s.updatePosition();
                         }
+
+                        //Narysuj całą planszę na nowo
                         repaintScene(gc);
                     }
                 }));
@@ -202,7 +211,7 @@ public class Controller {
     }
 
     private void initializeMouseEvents() {
-        // Clear away portions as the user drags the mouse
+        // Nieużwyana obecnie
         mycanvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
                 new EventHandler<MouseEvent>() {
                     @Override
@@ -213,7 +222,7 @@ public class Controller {
                     }
                 });
 
-        // Fill the Canvas with a Blue rectnagle when the user double-clicks
+        // Ustala nową pozycję docelową dla aktualnie wybranego sprite'a
         mycanvas.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 new EventHandler<MouseEvent>() {
                     @Override
@@ -228,6 +237,7 @@ public class Controller {
                             }
                         }
 
+                        //nieużywana
                         if (t.getClickCount() >1) {
 //                            reset(canvas, Color.BLUE);
                         }
@@ -239,6 +249,7 @@ public class Controller {
 
     //Podłączenie eventów pod klawisze
     private void initializeKeyboardEvents() {
+        //Wykorzystanie zdarzeń naciśnięcia klawiszy 1..4 do wyboru spriteów
         mycanvas.getScene().setOnKeyPressed(event -> {
             for(Sprite s : sprites) {
                 s.isSelected = false;
@@ -266,16 +277,6 @@ public class Controller {
         initializeKeyboardEvents();
         initializeGameAnimation(gc);
     }
-
-    //będzie wykonywana przy selekcji sprite'a; xx,yy pozwolą ustawić za który punkt sprite ma być ciągnięty
-    private void selectSpriteHitAt(int spriteId, int xx, int yy) {
-        selectedSprite = spriteId;
-        for(Sprite s : sprites) {
-            s.isSelected = false;
-        }
-        sprites.get(selectedSprite).isSelected = true;
-    }
-
 
     //////////////////////////////////////////////
     // Pozostałe metody (do testów JavaFX)
