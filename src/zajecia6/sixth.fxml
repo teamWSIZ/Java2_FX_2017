@@ -54,7 +54,7 @@
             <VBox alignment="TOP_CENTER" style="-fx-border-style: solid;-fx-border-radius: 5">
                 <Button style="-fx-pref-width: 200" mnemonicParsing="false" onAction="#loginDialog" text="Log In" BorderPane.alignment="CENTER" />
                 <Button style="-fx-pref-width: 200" mnemonicParsing="false" onAction="#zmienNaDuze" text="Zamień na duże litery" BorderPane.alignment="CENTER" />
-                <Button style="-fx-pref-width: 200" mnemonicParsing="false" onAction="#drawOnCanvas" text="Rysuj na canvas" BorderPane.alignment="CENTER" />
+                <Button style="-fx-pref-width: 200" mnemonicParsing="false" onAction="#startGame" text="Start game!" BorderPane.alignment="CENTER" />
                 <Button style="-fx-pref-width: 200" mnemonicParsing="false" onAction="#animateLulu" text="Prosta animacja" BorderPane.alignment="CENTER" />
                 <Button style="-fx-pref-width: 200" mnemonicParsing="false" onAction="#disableToolsMenu" text="Wyłącz 'Tools'" BorderPane.alignment="CENTER" />
                 <Button style="-fx-pref-width: 200" mnemonicParsing="false" onAction="#alertujUsera" text="Pokaż alert" BorderPane.alignment="CENTER" />

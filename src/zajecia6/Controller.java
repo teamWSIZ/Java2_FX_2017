@@ -7,6 +7,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -20,19 +21,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.ArcType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
-import javax.swing.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 public class Controller {
@@ -60,6 +56,7 @@ public class Controller {
 
     //stałe w programie
     int ICON_SIZE = 120;
+    int FRAMES_PER_SECOND = 30;
 
 
     class Sprite {
@@ -90,14 +87,6 @@ public class Controller {
 
     }
 
-    /**
-     * Do zrobienia:
-     * - wybór postaci (kliknięciem)
-     * - przesuwanie wybranej postaci
-     * - detekcja kolizi postaci -- np. zmiana tła obu na czerowne
-     * (todo: animacja gry: z prędkościami)
-     *
-     */
 
 
 
@@ -157,11 +146,8 @@ public class Controller {
     }
 
 
-    public void drawOnCanvas() {
-        //Użycie canvasu:
-        GraphicsContext gc = mycanvas.getGraphicsContext2D();
-
-        //tworzenie postaci gry (sprite'ów)
+    //tworzenie postaci gry (sprite'ów)
+    private void initializeSprintes() {
         sprites = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             Sprite s = new Sprite();
@@ -170,9 +156,24 @@ public class Controller {
             s.iconNumber = i;
             sprites.add(s);
         }
+    }
 
-        repaintScene(gc);
+    //Tworzenie periodycznej animacji
+    private void initializeGameAnimation(GraphicsContext gc) {
+        //Poniższy timelinie będzie odpalał "EventHandler" wybraną liczbę razy na sekunde
+        Timeline mainTimeline = new Timeline(new KeyFrame(Duration.millis(1000 / FRAMES_PER_SECOND),
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+//                System.out.println("called: " + new Date());
+                        repaintScene(gc);
+                    }
+                }));
+        mainTimeline.setCycleCount(Timeline.INDEFINITE);
+        mainTimeline.play();
+    }
 
+    private void initializeMouseEvents() {
         // Clear away portions as the user drags the mouse
         mycanvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
                 new EventHandler<MouseEvent>() {
@@ -181,8 +182,7 @@ public class Controller {
                         Sprite lulu = sprites.get(selectedSprite);
                         lulu.x = (int) (t.getX() + offsetX);
                         lulu.y = (int) (t.getY() + offsetY);
-                        repaintScene(gc);
-
+//                        repaintScene(gc);
                     }
                 });
 
@@ -191,13 +191,9 @@ public class Controller {
                 new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent t) {
-//                        System.out.println("Kliknięto w miejscu x=" + t.getX());
-//                        System.out.println("Pełna informacja:" + t);
-
                         //współrzędne kliknięcia
                         int xx = (int)t.getX();
                         int yy = (int)t.getY();
-
                         for (int spriteId = 0; spriteId < sprites.size(); spriteId++) {
                             if (sprites.get(spriteId).isHitAt(xx,yy)) {
                                 System.out.println("Sprite trafiony: " + spriteId);
@@ -205,25 +201,37 @@ public class Controller {
                             }
                         }
 
-
-
                         if (t.getClickCount() >1) {
 //                            reset(canvas, Color.BLUE);
                         }
                     }
                 });
 
+    }
+
+
+    //Podłączenie eventów pod klawisze
+    private void initializeKeyboardEvents() {
         mycanvas.getScene().setOnKeyPressed(event -> {
             String code = event.getCode().toString();
             System.out.println(code);
             if (event.getCode()== (KeyCode.DOWN)) {
                 System.out.println("Hit arrow down");
             }
+            if (event.getCode()== (KeyCode.UP)) {
+                System.out.println("Hit arrow up");
+            }
         });
+    }
 
-        //todo: załadować część obrazka
-        //todo: ustawić rodzaj pędzla
-        //todo: obsługa myszy i "draggable"
+    public void startGame() {
+        //Użycie canvasu:
+        GraphicsContext gc = mycanvas.getGraphicsContext2D();
+        initializeSprintes();
+        initializeMouseEvents();
+        initializeKeyboardEvents();
+        initializeGameAnimation(gc);
+
     }
 
     //będzie wykonywana przy selekcji sprite'a; xx,yy pozwolą ustawić za który punkt sprite ma być ciągnięty
@@ -256,6 +264,7 @@ public class Controller {
                         new KeyValue(phi, 180)
                 )
         );
+
         timeline.setAutoReverse(true);
         timeline.setCycleCount(12);
 
