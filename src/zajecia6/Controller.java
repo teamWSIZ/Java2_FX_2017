@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -53,10 +54,7 @@ public class Controller {
     List<Image> ikony;  //kolekcja obrazków
     List<Sprite> sprites;   //kolekcja obiektów odpowiadających postaciom gry
 
-    //selekcja postaci
-    int selectedSprite = 0;    //-1: żaden nie jest wybrany
-    int offsetX = 0;
-    int offsetY = 0;
+    Set<SmallSprite> fires;  //kolekcja małych obiektów animowanych
 
     //stałe w programie
     int ICON_SIZE = 120;
@@ -100,7 +98,7 @@ public class Controller {
 
         //sprawdza czy obecny sprite koliduje z punktem (px, py)
         boolean collidesWith(double px, double py) {
-            return distance(x, y, px, px) < COLLISION_DISTANCE;
+            return distance(x, y, px, py) < COLLISION_DISTANCE;
         }
 
         //Wykonywana jeśli chcemy by sprite od teraz poruszał się w kierunku punktu (newGoalX, newGoalY)
@@ -122,7 +120,7 @@ public class Controller {
             vy = v / Math.sqrt(1 + A * A);
             if (dy<0) vy = -vy;
             vx = A * vy;
-        };
+        }
 
         //Wykonywana w każdej klatce animacji: wyliczenie nowego położenia sprite'a
         public void updatePosition() {
@@ -163,6 +161,10 @@ public class Controller {
         for(Sprite s : sprites) {
             s.printSprite(gc);
         }
+        for(SmallSprite s : fires) {
+            s.printSprite(gc);
+        }
+
     }
 
 
@@ -186,6 +188,9 @@ public class Controller {
             sprites.add(s);
         }
         sprites.get(0).isSelected = true;
+
+        fires = new HashSet<>();     //narazie pusta lista małych spriteów
+
     }
 
     //Tworzenie periodycznej animacji
@@ -199,6 +204,16 @@ public class Controller {
 
                         //Przesuń sprite'y na nowe pozycje
                         for(Sprite s : sprites) {
+                            s.updatePosition();
+                        }
+                        Set<SmallSprite> toErase = new HashSet<>();
+                        for(SmallSprite s : fires) {
+                            if (s.isDead()) {
+                                toErase.add(s);
+                            }
+                        }
+                        fires.removeAll(toErase);
+                        for(SmallSprite s : fires) {
                             s.updatePosition();
                         }
 
@@ -227,13 +242,19 @@ public class Controller {
                 new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent t) {
+//                        System.out.println(t.getButton());
                         //współrzędne kliknięcia
                         int xx = (int)t.getX();
                         int yy = (int)t.getY();
 
                         for(Sprite s : sprites) {
                             if (s.isSelected) {
-                                s.setNewGoalPosition(xx, yy);
+                                if (t.getButton().equals(MouseButton.PRIMARY)) {
+                                    s.setNewGoalPosition(xx, yy);
+                                } else if (t.getButton().equals(MouseButton.SECONDARY)) {
+                                   fires.add(new SmallSprite(
+                                           s.x, s.y, xx, yy, 15, "fire", 7, 130, 5));
+                                }
                             }
                         }
 
