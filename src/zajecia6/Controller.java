@@ -45,6 +45,11 @@ public class Controller {
     Stage stage;
 
 
+    //////////////////////////////////////////
+    // Dane dotyczące gry
+    //////////////////////////////////////////
+
+
     List<Image> ikony;  //kolekcja obrazków
     List<Sprite> sprites;   //kolekcja obiektów odpowiadających postaciom gry
 
@@ -53,29 +58,37 @@ public class Controller {
     int offsetX = 0;
     int offsetY = 0;
 
-
     //stałe w programie
     int ICON_SIZE = 120;
     int FRAMES_PER_SECOND = 30;
 
 
     class Sprite {
-        int x, y;  //współrzędne lewego górnego rogu ikony
         int iconNumber;
         boolean isSelected;
 
-        //drukuje sprite'a na `gc` z lewym górnym rogiem w (x,y)
-        void printSprite(GraphicsContext gc) {
-            printIconWithRectangle(gc, ikony.get(iconNumber), x, y, isSelected);
+        //Położenia
+        double x, y;  //współrzędne centrum spritea
+        double goalX, goalY; //współrzędne punktu do którego zmierzamy
+
+        //Prędkości
+        double v = 5;
+        double vx = 0;
+        double vy = 0;
+
+
+        public Sprite(int iconNumber, double x, double y) {
+            this.iconNumber = iconNumber;
+            this.x = x;
+            this.y = y;
+            this.goalX = x;
+            this.goalY = y;
         }
 
-        //sprawdza, czy sprite pokrywa punkt (xx,yy)
-        boolean isHitAt(int xx, int yy) {
-            if (xx<x) return false;
-            if (xx>x+ICON_SIZE) return false;
-            if (yy<y) return false;
-            if (yy>y+ICON_SIZE) return false;
-            return true;
+        //drukuje sprite'a na `gc` z lewym górnym rogiem w (x,y)
+        void printSprite(GraphicsContext gc) {
+            printIconWithRectangle(gc, ikony.get(iconNumber),
+                    (int)x - ICON_SIZE/2, (int)y - ICON_SIZE/2, isSelected);
         }
 
         //sprawdza czy obecny sprite koliduje z innym spritem `s`
@@ -85,41 +98,43 @@ public class Controller {
             return true;
         }
 
-    }
 
+        public void setNewGoalPosition(double newGoalX, double newGoalY){
+            goalX = newGoalX;
+            goalY = newGoalY;
+            double dx = goalX - x;
+            double dy = goalY - y;
+            if (dy==0) {
+                if (dx>0) {
+                    vx = v;
+                } else {
+                    vx = -v;
+                }
+                return;
+            }
 
+            double A = dx / dy;
+            vy = v / Math.sqrt(1 + A * A);
+            if (dy<0) vy = -vy;
+            vx = A * vy;
+        };
 
-
-    public Controller() {
-        List<String> iconFiles = new ArrayList<>();
-        iconFiles.add("Lulu-Dragon-Trainer-icon.png");
-        iconFiles.add("Quinn-Valor-icon.png");
-        iconFiles.add("Yasuo-icon.png");
-        iconFiles.add("Veigar-icon.png");
-
-        ikony = new ArrayList<>();
-        for(String name : iconFiles) {
-            ikony.add(loadImage(name));
+        public void updatePosition() {
+            //warunek dla osiągnięcia celu
+            if (distance(x+vx, y+vy, goalX,goalY) > distance(x,y,goalX,goalY)) {
+                x = goalX;
+                y = goalY;
+                return;
+            }
+            x += vx;
+            y += vy;
         }
-    }
 
-    public void sayIt() {
-        System.out.println("It");
-    }
-
-    public void zmienNaDuze() {
-        String tekst = oknoTekstowe.getText();
-        tekst = tekst.toUpperCase();
-        oknoTekstowe.setText(tekst);
-    }
-
-    public void disableToolsMenu() {
-        boolean isDisabled = toolsMenu.isDisable();
-        if (isDisabled) {
-            toolsMenu.setDisable(false);
-        } else {
-            toolsMenu.setDisable(true);
+        private double distance(double x, double y, double x1, double y1) {
+            return Math.sqrt((x - x1) * (x - x1) + (y - y1) * (y - y1));
         }
+
+
     }
 
     private void printIconWithRectangle(GraphicsContext gc, Image i, int x, int y, boolean isSelected) {
@@ -147,15 +162,25 @@ public class Controller {
 
 
     //tworzenie postaci gry (sprite'ów)
-    private void initializeSprintes() {
+    private void initializeSprites() {
+        //Obrazki spriteów
+        List<String> iconFiles = new ArrayList<>();
+        iconFiles.add("Lulu-Dragon-Trainer-icon.png");
+        iconFiles.add("Quinn-Valor-icon.png");
+        iconFiles.add("Yasuo-icon.png");
+        iconFiles.add("Veigar-icon.png");
+
+        ikony = new ArrayList<>();
+        for(String name : iconFiles) {
+            ikony.add(loadImage(name));
+        }
+
         sprites = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            Sprite s = new Sprite();
-            s.x = 135 * i;
-            s.y = 55;
-            s.iconNumber = i;
+            Sprite s = new Sprite(i, 50 + 135 * i, 100);
             sprites.add(s);
         }
+        sprites.get(0).isSelected = true;
     }
 
     //Tworzenie periodycznej animacji
@@ -166,6 +191,9 @@ public class Controller {
                     @Override
                     public void handle(ActionEvent event) {
 //                System.out.println("called: " + new Date());
+                        for(Sprite s : sprites) {
+                            s.updatePosition();
+                        }
                         repaintScene(gc);
                     }
                 }));
@@ -179,10 +207,9 @@ public class Controller {
                 new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent t) {
-                        Sprite lulu = sprites.get(selectedSprite);
-                        lulu.x = (int) (t.getX() + offsetX);
-                        lulu.y = (int) (t.getY() + offsetY);
-//                        repaintScene(gc);
+//                        Sprite lulu = sprites.get(selectedSprite);
+//                        lulu.x = (int) (t.getX() + offsetX);
+//                        lulu.y = (int) (t.getY() + offsetY);
                     }
                 });
 
@@ -194,10 +221,10 @@ public class Controller {
                         //współrzędne kliknięcia
                         int xx = (int)t.getX();
                         int yy = (int)t.getY();
-                        for (int spriteId = 0; spriteId < sprites.size(); spriteId++) {
-                            if (sprites.get(spriteId).isHitAt(xx,yy)) {
-                                System.out.println("Sprite trafiony: " + spriteId);
-                                selectSpriteHitAt(spriteId, xx, yy);
+
+                        for(Sprite s : sprites) {
+                            if (s.isSelected) {
+                                s.setNewGoalPosition(xx, yy);
                             }
                         }
 
@@ -213,13 +240,20 @@ public class Controller {
     //Podłączenie eventów pod klawisze
     private void initializeKeyboardEvents() {
         mycanvas.getScene().setOnKeyPressed(event -> {
-            String code = event.getCode().toString();
-            System.out.println(code);
-            if (event.getCode()== (KeyCode.DOWN)) {
-                System.out.println("Hit arrow down");
+            for(Sprite s : sprites) {
+                s.isSelected = false;
             }
-            if (event.getCode()== (KeyCode.UP)) {
-                System.out.println("Hit arrow up");
+            if (event.getCode()== (KeyCode.DIGIT1)) {
+                sprites.get(0).isSelected = true;
+            }
+            if (event.getCode()== (KeyCode.DIGIT2)) {
+                sprites.get(1).isSelected = true;
+            }
+            if (event.getCode()== (KeyCode.DIGIT3)) {
+                sprites.get(2).isSelected = true;
+            }
+            if (event.getCode()== (KeyCode.DIGIT4)) {
+                sprites.get(3).isSelected = true;
             }
         });
     }
@@ -227,22 +261,44 @@ public class Controller {
     public void startGame() {
         //Użycie canvasu:
         GraphicsContext gc = mycanvas.getGraphicsContext2D();
-        initializeSprintes();
+        initializeSprites();
         initializeMouseEvents();
         initializeKeyboardEvents();
         initializeGameAnimation(gc);
-
     }
 
     //będzie wykonywana przy selekcji sprite'a; xx,yy pozwolą ustawić za który punkt sprite ma być ciągnięty
     private void selectSpriteHitAt(int spriteId, int xx, int yy) {
         selectedSprite = spriteId;
-        offsetX = sprites.get(spriteId).x - xx;
-        offsetY = sprites.get(spriteId).y - yy;
         for(Sprite s : sprites) {
             s.isSelected = false;
         }
         sprites.get(selectedSprite).isSelected = true;
+    }
+
+
+    //////////////////////////////////////////////
+    // Pozostałe metody (do testów JavaFX)
+    // (nie związane z grą)
+    //////////////////////////////////////////////
+
+    public void sayIt() {
+        System.out.println("It");
+    }
+
+    public void zmienNaDuze() {
+        String tekst = oknoTekstowe.getText();
+        tekst = tekst.toUpperCase();
+        oknoTekstowe.setText(tekst);
+    }
+
+    public void disableToolsMenu() {
+        boolean isDisabled = toolsMenu.isDisable();
+        if (isDisabled) {
+            toolsMenu.setDisable(false);
+        } else {
+            toolsMenu.setDisable(true);
+        }
     }
 
     public void animateLulu() {
