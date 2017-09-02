@@ -53,6 +53,7 @@
         <right>
             <VBox alignment="TOP_CENTER" style="-fx-border-style: solid;-fx-border-radius: 5">
                 <Button style="-fx-pref-width: 100"  onAction="#showDialog" text="Log In" BorderPane.alignment="CENTER" />
+                <Button style="-fx-pref-width: 100"  onAction="#showPicture" text="Show selected picture" BorderPane.alignment="CENTER" />
                 <Label onMouseClicked="#alertujUsera"> (na Label) pokaż alert</Label>
             </VBox>
         </right>
