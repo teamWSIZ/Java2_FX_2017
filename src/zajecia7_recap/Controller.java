@@ -6,9 +6,24 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Controller {
     @FXML
     Canvas mycanvas;
+
+    String path = "res/";
+    List<String> files;
+    int fileIndex = 0;
+
+    //Funkcja wykonywana na początku tworzenia sceny
+    public void initialize() {
+        files = new ArrayList<>();
+        files.add("Veigar-icon.png");
+        files.add("Yasuo-icon.png");
+        System.out.println("initializing...");
+    }
 
 
     public void sayIt() {
@@ -24,9 +39,29 @@ public class Controller {
     }
 
     public void showPicture() {
-        Image veigar = new Image(getClass().getResourceAsStream("res/Veigar-icon.png"));
+        Image currentlySelected =
+                new Image(getClass().getResourceAsStream(path + files.get(fileIndex)));
         GraphicsContext gc = mycanvas.getGraphicsContext2D();
-        gc.drawImage(veigar, 10, 50, 250, 250);
+        gc.clearRect(0, 0, 400, 400);
+        gc.drawImage(currentlySelected, 10, 50, 250, 250);
 
     }
+
+    public void nextFile() {
+        fileIndex += 1;
+        if (fileIndex>=files.size()) {
+            fileIndex -= files.size();
+        }
+        showPicture();
+    }
+
+    public void previousFile() {
+        fileIndex -= 1;
+        if (fileIndex<0) {
+            fileIndex += files.size();
+        }
+        showPicture();
+    }
+
+
 }

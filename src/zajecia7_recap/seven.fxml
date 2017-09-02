@@ -61,10 +61,15 @@
             <Canvas fx:id="mycanvas" height="400" width="400" />
         </center>
         <left>
-            <TextArea fx:id="oknoTekstowe" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+            <VBox alignment="TOP_CENTER" style="-fx-border-style: solid;-fx-border-radius: 5; -fx-pref-width: 130">
+
+            </VBox>
         </left>
         <bottom>
-            <Label> Footnote na dole</Label>
+            <HBox alignment="TOP_CENTER">
+                <Button style="-fx-pref-width: 100"  onAction="#previousFile" text="Previous" BorderPane.alignment="CENTER" />
+                <Button style="-fx-pref-width: 100"  onAction="#nextFile" text="Next" BorderPane.alignment="CENTER" />
+            </HBox>
         </bottom>
     </BorderPane>
 
