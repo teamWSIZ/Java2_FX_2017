@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -141,7 +142,12 @@ public class Controller {
         DirectoryChooser chooser = new DirectoryChooser();
 
         URL url = getClass().getResource(".");
-        File defaultDir = new File(url.getPath() + File.separator + path);
+        File defaultDir = null;
+        try {
+            defaultDir = new File(URLDecoder.decode(url.getPath(),"UTF-8") + File.separator + path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         chooser.setInitialDirectory(defaultDir);
 
         File selectedDirectory = chooser.showDialog(stage);
