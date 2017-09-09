@@ -1,11 +1,16 @@
 package zajecia7_recap;
 
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -27,6 +32,9 @@ public class Controller {
     @FXML
     Stage stage;
 
+    @FXML
+    VBox leftpanel;
+
     String path = "res";
 
     List<String> files;
@@ -42,6 +50,16 @@ public class Controller {
         IMG_SIZE = Math.min(300,
                 (int)Math.min(mycanvas.getHeight() - 2 * IMG_PAD, mycanvas.getWidth() - 2 * IMG_PAD));
         System.out.println(IMG_SIZE);
+
+        ListView<String> list = new ListView<String>();
+        list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        ObservableList<String> items = FXCollections.observableArrayList (
+                "Single", "Double", "Suite", "Family App", "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite"
+                , "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite"
+                , "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite");
+        list.setItems(items);
+
+        leftpanel.getChildren().add(list);
     }
 
 
