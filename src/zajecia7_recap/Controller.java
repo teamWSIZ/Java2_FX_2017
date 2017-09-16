@@ -12,13 +12,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +49,7 @@ public class Controller {
                 (int)Math.min(mycanvas.getHeight() - 2 * IMG_PAD, mycanvas.getWidth() - 2 * IMG_PAD));
         System.out.println(IMG_SIZE);
 
-        ListView<String> list = new ListView<String>();
+        ListView<String> list = new ListView<>();
         list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         ObservableList<String> items = FXCollections.observableArrayList (
                 "Single", "Double", "Suite", "Family App", "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite", "Double", "Suite"
