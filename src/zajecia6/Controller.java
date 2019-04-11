@@ -31,29 +31,25 @@ import javafx.util.Pair;
 import java.io.File;
 import java.util.*;
 
+import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
+import static javafx.scene.input.MouseEvent.MOUSE_DRAGGED;
+import static javafx.scene.paint.Color.GRAY;
+import static javafx.scene.paint.Color.YELLOWGREEN;
+
 
 public class Controller {
-    @FXML
-    TextArea oknoTekstowe;
-
-    @FXML
-    Menu toolsMenu;
-
-    @FXML
-    Canvas mycanvas;
-
-    @FXML
-    Stage stage;
+    @FXML TextArea oknoTekstowe;
+    @FXML Menu toolsMenu;
+    @FXML Canvas mycanvas;
+    @FXML Stage stage;
 
 
     //////////////////////////////////////////
     // Dane dotyczące gry
     //////////////////////////////////////////
 
-
     List<Image> ikony;  //kolekcja obrazków
     List<Sprite> sprites;   //kolekcja obiektów odpowiadających postaciom gry
-
     Set<SmallSprite> fires;  //kolekcja małych obiektów animowanych
 
     //stałe w programie
@@ -82,7 +78,7 @@ public class Controller {
 
 
         //tzw. Konstruktor, czyli tworzenie konkretnej instancji tej klasy
-        public Sprite(int iconNumber, double x, double y) {
+        Sprite(int iconNumber, double x, double y) {
             this.iconNumber = iconNumber;
             this.x = x;
             this.y = y;
@@ -102,7 +98,7 @@ public class Controller {
         }
 
         //Wykonywana jeśli chcemy by sprite od teraz poruszał się w kierunku punktu (newGoalX, newGoalY)
-        public void setNewGoalPosition(double newGoalX, double newGoalY){
+        void setNewGoalPosition(double newGoalX, double newGoalY){
             goalX = newGoalX;
             goalY = newGoalY;
             double dx = goalX - x;
@@ -123,7 +119,7 @@ public class Controller {
         }
 
         //Wykonywana w każdej klatce animacji: wyliczenie nowego położenia sprite'a
-        public void updatePosition() {
+        void updatePosition() {
             //warunek dla osiągnięcia celu
             if (distance(x+vx, y+vy, goalX,goalY) > distance(x,y,goalX,goalY)) {
                 x = goalX;
@@ -144,10 +140,10 @@ public class Controller {
         gc.drawImage(i, x+5, y+5, ICON_SIZE-5, ICON_SIZE-5);
         if (isSelected) {
             gc.setLineWidth(3);
-            gc.setStroke(Color.YELLOWGREEN);
+            gc.setStroke(YELLOWGREEN);
         } else {
             gc.setLineWidth(1);
-            gc.setStroke(Color.GRAY);
+            gc.setStroke(GRAY);
         }
         gc.strokeRoundRect(x, y, ICON_SIZE, ICON_SIZE, 10, 10);
         gc.setStroke(Color.BLACK);
@@ -197,29 +193,26 @@ public class Controller {
     private void initializeGameAnimation(GraphicsContext gc) {
         //Poniższy timelinie będzie odpalał "EventHandler" wybraną liczbę razy na sekunde
         Timeline mainTimeline = new Timeline(new KeyFrame(Duration.millis(1000 / FRAMES_PER_SECOND),
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        //Wykonywana w każdej klatce animacji gry:
+                event -> {
+                    //Wykonywana w każdej klatce animacji gry:
 
-                        //Przesuń sprite'y na nowe pozycje
-                        for(Sprite s : sprites) {
-                            s.updatePosition();
-                        }
-                        Set<SmallSprite> toErase = new HashSet<>();
-                        for(SmallSprite s : fires) {
-                            if (s.isDead()) {
-                                toErase.add(s);
-                            }
-                        }
-                        fires.removeAll(toErase);
-                        for(SmallSprite s : fires) {
-                            s.updatePosition();
-                        }
-
-                        //Narysuj całą planszę na nowo
-                        repaintScene(gc);
+                    //Przesuń sprite'y na nowe pozycje
+                    for(Sprite s : sprites) {
+                        s.updatePosition();
                     }
+                    Set<SmallSprite> toErase = new HashSet<>();
+                    for(SmallSprite s : fires) {
+                        if (s.isDead()) {
+                            toErase.add(s);
+                        }
+                    }
+                    fires.removeAll(toErase);
+                    for(SmallSprite s : fires) {
+                        s.updatePosition();
+                    }
+
+                    //Narysuj całą planszę na nowo
+                    repaintScene(gc);
                 }));
         mainTimeline.setCycleCount(Timeline.INDEFINITE);
         mainTimeline.play();
@@ -227,41 +220,34 @@ public class Controller {
 
     private void initializeMouseEvents() {
         // Nieużwyana obecnie
-        mycanvas.addEventHandler(MouseEvent.MOUSE_DRAGGED,
-                new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent t) {
+        mycanvas.addEventHandler(MOUSE_DRAGGED,
+                t -> {
 //                        Sprite lulu = sprites.get(selectedSprite);
 //                        lulu.x = (int) (t.getX() + offsetX);
 //                        lulu.y = (int) (t.getY() + offsetY);
-                    }
                 });
 
         // Ustala nową pozycję docelową dla aktualnie wybranego sprite'a
-        mycanvas.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent t) {
+        mycanvas.addEventHandler(MOUSE_CLICKED, t -> {
 //                        System.out.println(t.getButton());
-                        //współrzędne kliknięcia
-                        int xx = (int)t.getX();
-                        int yy = (int)t.getY();
+                    //współrzędne kliknięcia
+                    int xx = (int)t.getX();
+                    int yy = (int)t.getY();
 
-                        for(Sprite s : sprites) {
-                            if (s.isSelected) {
-                                if (t.getButton().equals(MouseButton.PRIMARY)) {
-                                    s.setNewGoalPosition(xx, yy);
-                                } else if (t.getButton().equals(MouseButton.SECONDARY)) {
-                                   fires.add(new SmallSprite(
-                                           s.x, s.y, xx, yy, 15, "fire", 7, 130, 5));
-                                }
+                    for(Sprite s : sprites) {
+                        if (s.isSelected) {
+                            if (t.getButton().equals(MouseButton.PRIMARY)) {
+                                s.setNewGoalPosition(xx, yy);
+                            } else if (t.getButton().equals(MouseButton.SECONDARY)) {
+                               fires.add(new SmallSprite(
+                                       s.x, s.y, xx, yy, 15, "fire", 7, 130, 5));
                             }
                         }
+                    }
 
-                        //nieużywana
-                        if (t.getClickCount() >1) {
+                    //nieużywana
+                    if (t.getClickCount() >1) {
 //                            reset(canvas, Color.BLUE);
-                        }
                     }
                 });
 

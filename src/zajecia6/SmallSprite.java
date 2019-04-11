@@ -25,8 +25,7 @@ public class SmallSprite {
         loadSpriteAnimation(filename, iconCount);
     }
 
-    private void setGoals(double tgtX, double tgtY,
-                          int maxPhase, double speed) {
+    private void setGoals(double tgtX, double tgtY, int maxPhase, double speed) {
         goalX = tgtX;
         goalY = tgtY;
         double dx = goalX - x;
@@ -48,11 +47,11 @@ public class SmallSprite {
         this.maxPhase = maxPhase;
     }
 
-    public void printSprite(GraphicsContext gc) {
+    void printSprite(GraphicsContext gc) {
         gc.drawImage(icons[phase % icons.length], x-iconSize/2, y-iconSize/2, iconSize, iconSize);
     }
 
-    public void updatePosition() {
+    void updatePosition() {
         frameCounter++;
         phase = (frameCounter / 3);
         //warunek dla osiągnięcia celu
@@ -65,7 +64,7 @@ public class SmallSprite {
         y += vy;
     }
 
-    public boolean isDead() {
+    boolean isDead() {
         return phase > maxPhase;
     }
 
@@ -73,11 +72,11 @@ public class SmallSprite {
         return Math.sqrt((x - x1) * (x - x1) + (y - y1) * (y - y1));
     }
 
+    //wczytuje ikony animacji z kolejnych plików
     private void loadSpriteAnimation(String filename, int iconCount) {
         icons = new Image[iconCount];
         for (int i = 0; i < iconCount; i++) {
-            icons[i] = new Image(
-                    getClass().getResourceAsStream("res/" + filename + (i+1) + ".png"));
+            icons[i] = new Image(getClass().getResourceAsStream("res/" + filename + (i+1) + ".png"));
         }
     }
 }
